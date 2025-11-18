@@ -1,18 +1,44 @@
-import { useState, type MouseEvent } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 
 const App = () => {
-  const [clickPosition, setClickPosition] = useState({ x: 0, y: 0 });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+    category: "general",
+  });
 
-  const handleMouseClick = (e: MouseEvent<HTMLDivElement>) => {
-    setClickPosition({ x: e.clientX, y: e.clientY });
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("제출된 데이터:", formData);
+    alert("폼이 제출되었습니다!");
   };
 
   return (
-    <div
-      className="bg-red-100 min-h-screen flex justify-center items-center"
-      onClick={handleMouseClick}
-    >
-      클릭해보세요! 마지막 클릭 위치: ({clickPosition.x}, {clickPosition.y})
+    <div className="bg-red-100 min-h-screen flex justify-center items-center">
+      <form onSubmit={handleFormSubmit}>
+        <h4>Form Event Test</h4>
+
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            placeholder="이름을 입력하세요"
+          />
+        </div>
+        <button type="submit">제출</button>
+      </form>
     </div>
   );
 };
